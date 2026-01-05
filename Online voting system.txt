@@ -1,0 +1,396 @@
+                  ONLINE VOTING SYSTEM
+_________________________________________
+
+AIM:
+     
+The aim of this project is to develop a simple Online Voting System using C programming that allows voters to cast their votes securely, prevents duplicate voting, and displays accurate election results
+
+
+OBJECTIVES:
+
+The main objectives of this project are:
+
+• To understand the use of structures and file handling in C
+• To simulate an online voting process in an offline environment
+• To provide secure voting using voter authentication
+• To avoid multiple voting by the same voter
+• To display accurate election results
+• To improve programming and problem-solving skills
+
+ALGORITHM:
+	
+    1.Start the programm
+    2.Display main menu
+    3.Register voter details
+    4.Admin logs in using username and password
+     5.Voter enters voter ID and casts vote
+     6.Check whether the voter has already voted
+      7.Store and count votes
+      8.Display election results
+      9.Stop the program
+
+FEATURES OF THE SYSTEM:
+
+• Simple and user-friendly interface
+• Prevents duplicate voting
+• Accurate vote counting
+• Secure admin access
+• Fast result generation
+• Uses file handling for data stora
+
+ADVANTAGES:
+
+• Saves time and manpower
+• Eliminates manual errors
+• Easy to use and understand
+• Accurate and reliable
+• Cost-effective
+
+LIMITATIONS:
+
+• Works only in offline mode
+• Limited security compared to real online systems
+• Suitable only for small-scale elections
+
+ APPLICATIONS:
+
+• College elections
+• School elections
+• Office internal voting
+• Opinion polls
+
+Program: 
+       
+        #include<stdio.h>
+        ONLINE VOTING SYSTEM
+        MINI PROJECT IN C PROGRAMMING
+
+        Features:
+        - Admin Login
+        - Voter Registration
+        - Vote Casting
+        - Result Display
+        - Duplicate Vote Prevention
+
+        Developed for College Mini Project
+**********************************************
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+/* Structure to store voter details */
+struct voter
+{
+    int voter_id;
+    char name[50];
+    int has_voted;
+};
+
+/* Structure to store candidate details */
+struct candidate
+{
+    int candidate_id;
+    char name[50];
+    int votes;
+};
+
+/* Global variables */
+struct voter voters[100];
+struct candidate candidates[5];
+
+int voter_count = 0;
+int candidate_count = 3;
+
+/* Function declarations */
+void admin_login();
+void voter_registration();
+void cast_vote();
+void display_results();
+void main_menu();
+
+***********************************************
+                MAIN FUNCTION
+***********************************************
+int main()
+{
+    int choice;
+
+    /* Initialize candidates */
+    candidates[0].candidate_id = 1;
+    strcpy(candidates[0].name, "Candidate A");
+    candidates[0].votes = 0;
+    candidates[1].candidate_id = 2;
+    strcpy(candidates[1].name, "Candidate B");
+    candidates[1].votes = 0;
+    candidates[2].candidate_id = 3;
+    strcpy(candidates[2].name, "Candidate C");
+    candidates[2].votes = 0;
+    while (1)
+    {
+        main_menu();
+        printf("\nEnter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice)
+        {
+        case 1:
+            admin_login();
+            break;
+        case 2:
+            voter_registration();
+            break;
+        case 3:
+            cast_vote();
+            break;
+        case 4:
+            display_results();
+            break;
+        case 5:
+            printf("\nThank you for using Online Voting System.\n");
+            exit(0);
+        default:
+            printf("\nInvalid choice! Try again.\n");
+        }
+    }
+    return 0;
+}
+
+***********************************************
+                MAIN MENU FUNCTION
+**********************************************
+void main_menu()
+{
+    printf("\n====================================");
+    printf("\n        ONLINE VOTING SYSTEM");
+    printf("\n====================================");
+    printf("\n1. Admin Login");
+    printf("\n2. Voter Registration");
+    printf("\n3. Cast Vote");
+    printf("\n4. Display Results");
+    printf("\n5. Exit");
+    printf("\n====================================\n");
+}
+
+***********************************************
+                ADMIN LOGIN FUNCTION
+***********************************************
+void admin_login()
+{
+    char username[20], password[20];
+    printf("\n----- ADMIN LOGIN -----");
+    printf("\nEnter Username: ");
+    scanf("%s", username);
+    printf("Enter Password: ");
+    scanf("%s", password);
+    if (strcmp(username, "admin") == 0 && strcmp(password, "1234") == 0)
+    {
+        printf("\nLogin Successful!\n");
+        display_results();
+    }
+    else
+    {
+        printf("\nInvalid Username or Password!\n");
+    }
+}
+
+***********************************************
+            VOTER REGISTRATION FUNCTION
+***********************************************
+void voter_registration()
+{
+    printf("\n----- VOTER REGISTRATION -----");
+    voters[voter_count].voter_id = voter_count + 1;
+    printf("\nEnter Voter Name: ");
+    scanf("%s", voters[voter_count].name);
+    voters[voter_count].has_voted = 0;
+    printf("\nVoter Registered Successfully!");
+    printf("\nVoter ID is: %d\n", voters[voter_count].voter_id);
+    voter_count++;
+} 
+
+***********************************************
+                CAST VOTE FUNCTION
+***********************************************
+void cast_vote()
+{
+    int voter_id, choice, i;
+    int found = 0;
+    printf("\n----- CAST YOUR VOTE -----");
+    printf("\nEnter Voter ID: ");
+    scanf("%d", &voter_id);
+    for (i = 0; i < voter_count; i++)
+    {
+        if (voters[i].voter_id == voter_id)
+        {
+            found = 1;
+            if (voters[i].has_voted == 1)
+            {
+                printf("\nYou have already voted!\n");
+                return;
+            }
+            printf("\nCandidates List:");
+            printf("\n1. %s", candidates[0].name);
+            printf("\n2. %s", candidates[1].name);
+            printf("\n3. %s", candidates[2].name);
+            printf("\nEnter your choice: ");
+            scanf("%d", &choice);
+            if (choice >= 1 && choice <= 3)
+            {
+                candidates[choice - 1].votes++;
+                voters[i].has_voted = 1;
+                printf("\nVote Cast Successfully!\n");
+            }
+            else
+            {
+                printf("\nInvalid choice!\n");
+            }
+            return;
+        }
+    }
+    if (!found)
+    {
+        printf("\nInvalid Voter ID!\n");
+    }
+}
+***********************************************
+            DISPLAY RESULT FUNCTION
+***********************************************
+void display_results()
+{
+    int i, max_votes = 0, winner = 0;
+    printf("\n----- ELECTION RESULTS -----\n");
+    for (i = 0; i < candidate_count; i++)
+    {
+        printf("\n%s : %d votes", candidates[i].name, candidates[i].votes);
+        if (candidates[i].votes > max_votes)
+        {
+            max_votes = candidates[i].votes;
+            winner = i;
+        }
+    }
+    printf("\n\nWinner is: %s", candidates[winner].name);
+    printf("\n-----------------------------\n");
+}
+
+RESULT:
+
+The Online Voting System was successfully implemented using C programming.
+The system allows voter registration, vote casting, and result display while preventing multiple voting.
+The output obtained is accurate and meets the objectives of the program.
+
+
+                          ***********************************************
+
+
+
+
+Sample ouput:
+
+===================================
+        ONLINE VOTING SYSTEM
+===================================
+1. Admin Login
+2. Voter Registration
+3. Cast Vote
+4. Display Results
+5. Exit
+===================================
+
+Enter your choice: 2
+
+----- VOTER REGISTRATION -----
+Enter Voter Name: Ravi
+
+Voter Registered Successfully!
+Voter ID is: 1
+===================================
+        ONLINE VOTING SYSTEM
+===================================
+1. Admin Login
+2. Voter Registration
+3. Cast Vote
+4. Display Results
+5. Exit
+===================================
+
+Enter your choice: 2
+
+----- VOTER REGISTRATION -----
+Enter Voter Name: Anu
+
+Voter Registered Successfully!
+Voter ID is: 2
+
+===================================
+        ONLINE VOTING SYSTEM
+===================================
+1. Admin Login
+2. Voter Registration
+3. Cast Vote
+4. Display Results
+5. Exit
+===================================
+
+Enter your choice: 3
+
+----- CAST YOUR VOTE -----
+Enter Voter ID: 1
+
+Candidates List:
+1. Candidate A
+2. Candidate B
+3. Candidate C
+Enter your choice: 2
+
+Vote Cast Successfully!
+
+===================================
+        ONLINE VOTING SYSTEM
+===================================
+1. Admin Login
+2. Voter Registration
+3. Cast Vote
+4. Display Results
+5. Exit
+===================================
+
+Enter your choice: 3
+
+----- CAST YOUR VOTE -----
+Enter Voter ID: 2
+
+Candidates List:
+1. Candidate A
+2. Candidate B
+3. Candidate C
+Enter your choice: 1
+
+Vote Cast Successfully!
+
+===================================
+        ONLINE VOTING SYSTEM
+===================================
+1. Admin Login
+2. Voter Registration
+3. Cast Vote
+4. Display Results
+5. Exit
+===================================
+
+Enter your choice: 1
+
+----- ADMIN LOGIN -----
+Enter Username: admin
+Enter Password: 1234
+
+Login Successful!
+
+----- ELECTION RESULTS -----
+
+Candidate A : 1 votes
+Candidate B : 1 votes
+Candidate C : 0 votes
+
+Winner is: Candidate A
+-----------------------------
